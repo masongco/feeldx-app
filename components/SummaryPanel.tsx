@@ -48,8 +48,19 @@ export default function SummaryPanel({ room, selections, summary, onGenerate }: 
             );
           })}
         </div>
-        <div className="mt-3 pt-3 border-t border-stone-100 text-xs text-stone-400">
-          {selectedCount} of {categories.length} selected
+        <div className="mt-3 pt-3 border-t border-stone-100 space-y-2">
+          <div className="flex justify-between text-xs text-stone-400">
+            <span>{selectedCount} of {categories.length} selected</span>
+            {selectedCount === categories.length && (
+              <span className="text-emerald-600 font-medium">Complete</span>
+            )}
+          </div>
+          <div className="h-1.5 bg-stone-100 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-stone-900 rounded-full transition-all duration-300"
+              style={{ width: `${(selectedCount / categories.length) * 100}%` }}
+            />
+          </div>
         </div>
       </div>
 
