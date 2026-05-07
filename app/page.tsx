@@ -6,7 +6,7 @@ export default function Home() {
       <header className="bg-white border-b border-stone-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4">
           <h1 className="text-lg font-semibold text-stone-900 tracking-tight">
-            FeelDX Room Designer
+            FEEL DX Room Designer
           </h1>
           <p className="text-sm text-stone-400 mt-0.5">
             Pick a room, select your materials, generate a summary.

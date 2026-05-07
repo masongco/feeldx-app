@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FeelDX Room Designer",
+  title: "FEEL DX Room Designer",
   description: "Select a room, choose your materials and furniture, and generate a design summary.",
 };
 
