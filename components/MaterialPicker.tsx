@@ -29,9 +29,19 @@ export default function MaterialPicker({ room, selections, onSelect }: Props) {
 
         return (
           <div key={category}>
-            <p className="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-3">
-              {CATEGORY_LABEL[category]}
-            </p>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs font-semibold uppercase tracking-widest text-stone-400">
+                {CATEGORY_LABEL[category]}
+              </p>
+              {selected && (
+                <button
+                  onClick={() => onSelect(category, null)}
+                  className="text-xs text-stone-400 hover:text-stone-700 transition-colors"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {items.map((item) => {
                 const isSelected = selected?.id === item.id;
@@ -39,14 +49,21 @@ export default function MaterialPicker({ room, selections, onSelect }: Props) {
                   <button
                     key={item.id}
                     onClick={() => onSelect(category, isSelected ? null : item)}
-                    className={`text-left p-3 rounded-xl border transition-all duration-150 hover:scale-[1.02] active:scale-[0.97] ${
+                    className={`relative text-left p-3 rounded-xl border transition-all duration-150 hover:scale-[1.02] active:scale-[0.97] ${
                       isSelected
                         ? 'bg-stone-900 border-stone-900 text-white'
                         : 'bg-white border-stone-200 text-stone-700 hover:border-stone-400 hover:shadow-sm'
                     }`}
                   >
-                    <p className="text-sm font-medium leading-tight mb-1">{item.name}</p>
-                    <p className={`text-xs mb-2 leading-tight ${isSelected ? 'text-stone-400' : 'text-stone-400'}`}>
+                    {isSelected && (
+                      <span className="absolute top-2 right-2 flex items-center justify-center w-4 h-4 rounded-full bg-white/20">
+                        <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 10">
+                          <path d="M1.5 5l2.5 2.5 4.5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                    )}
+                    <p className="text-sm font-medium leading-tight mb-1 pr-5">{item.name}</p>
+                    <p className="text-xs mb-2 leading-tight text-stone-400">
                       {item.description}
                     </p>
                     <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${isSelected ? COST_BADGE_SELECTED : COST_BADGE[item.cost]}`}>
