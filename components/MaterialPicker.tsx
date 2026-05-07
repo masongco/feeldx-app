@@ -39,10 +39,10 @@ export default function MaterialPicker({ room, selections, onSelect }: Props) {
                   <button
                     key={item.id}
                     onClick={() => onSelect(category, isSelected ? null : item)}
-                    className={`text-left p-3 rounded-xl border transition-all ${
+                    className={`text-left p-3 rounded-xl border transition-all duration-150 hover:scale-[1.02] active:scale-[0.97] ${
                       isSelected
                         ? 'bg-stone-900 border-stone-900 text-white'
-                        : 'bg-white border-stone-200 text-stone-700 hover:border-stone-400'
+                        : 'bg-white border-stone-200 text-stone-700 hover:border-stone-400 hover:shadow-sm'
                     }`}
                   >
                     <p className="text-sm font-medium leading-tight mb-1">{item.name}</p>

@@ -68,7 +68,7 @@ export default function SummaryPanel({ room, selections, summary, onGenerate }: 
 
       {/* AI summary output */}
       {summary && (
-        <div className="bg-white border border-stone-200 rounded-2xl p-4 space-y-4">
+        <div className="animate-fade-in bg-white border border-stone-200 rounded-2xl p-4 space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-xs font-semibold uppercase tracking-widest text-stone-400">AI Summary</p>
             <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${COST_BADGE[summary.costLevel]}`}>
