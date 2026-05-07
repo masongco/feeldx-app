@@ -35,14 +35,14 @@ export default function RoomDesigner() {
   }
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1rem' }}>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
       <RoomSelector selectedRoom={room} onSelect={handleRoomChange} />
-      <hr style={{ margin: '1.5rem 0' }} />
-      <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
-        <div style={{ flex: 2 }}>
+
+      <div className="mt-8 flex flex-col lg:flex-row gap-8 items-start">
+        <div className="w-full lg:flex-[2]">
           <MaterialPicker room={room} selections={selections} onSelect={handleSelect} />
         </div>
-        <div style={{ flex: 1 }}>
+        <div className="w-full lg:flex-1 lg:sticky lg:top-6">
           <SummaryPanel
             room={room}
             selections={selections}

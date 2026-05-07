@@ -1,5 +1,17 @@
 import { RoomType, Category, Item, ROOM_CATEGORIES, CATEGORY_LABEL, getItemsByCategory } from '@/lib/data';
 
+const COST_BADGE: Record<string, string> = {
+  low:    'bg-emerald-50 text-emerald-700 border border-emerald-200',
+  medium: 'bg-amber-50 text-amber-700 border border-amber-200',
+  high:   'bg-red-50 text-red-700 border border-red-200',
+};
+
+const COST_BADGE_SELECTED = 'bg-white/20 text-white border border-white/30';
+
+const COST_LABEL: Record<string, string> = {
+  low: 'Budget', medium: 'Mid', high: 'Premium',
+};
+
 interface Props {
   room: RoomType;
   selections: Partial<Record<Category, Item>>;
@@ -10,34 +22,36 @@ export default function MaterialPicker({ room, selections, onSelect }: Props) {
   const categories = ROOM_CATEGORIES[room];
 
   return (
-    <div>
+    <div className="space-y-8">
       {categories.map((category) => {
         const items = getItemsByCategory(category);
         const selected = selections[category];
 
         return (
-          <div key={category} style={{ marginBottom: '2rem' }}>
-            <p style={{ fontWeight: 600, marginBottom: '0.5rem' }}>
+          <div key={category}>
+            <p className="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-3">
               {CATEGORY_LABEL[category]}
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {items.map((item) => {
                 const isSelected = selected?.id === item.id;
                 return (
                   <button
                     key={item.id}
                     onClick={() => onSelect(category, isSelected ? null : item)}
-                    style={{
-                      padding: '0.4rem 0.8rem',
-                      border: isSelected ? '2px solid black' : '1px solid #ccc',
-                      borderRadius: '6px',
-                      background: isSelected ? '#111' : '#fff',
-                      color: isSelected ? '#fff' : '#333',
-                      cursor: 'pointer',
-                      fontSize: '0.875rem',
-                    }}
+                    className={`text-left p-3 rounded-xl border transition-all ${
+                      isSelected
+                        ? 'bg-stone-900 border-stone-900 text-white'
+                        : 'bg-white border-stone-200 text-stone-700 hover:border-stone-400'
+                    }`}
                   >
-                    {item.name}
+                    <p className="text-sm font-medium leading-tight mb-1">{item.name}</p>
+                    <p className={`text-xs mb-2 leading-tight ${isSelected ? 'text-stone-400' : 'text-stone-400'}`}>
+                      {item.description}
+                    </p>
+                    <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${isSelected ? COST_BADGE_SELECTED : COST_BADGE[item.cost]}`}>
+                      {COST_LABEL[item.cost]}
+                    </span>
                   </button>
                 );
               })}

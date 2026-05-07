@@ -1,6 +1,16 @@
 import { RoomType, Category, Item, ROOM_CATEGORIES, CATEGORY_LABEL, ROOMS } from '@/lib/data';
 import { Summary } from '@/lib/summary';
 
+const COST_BADGE: Record<string, string> = {
+  low:    'bg-emerald-100 text-emerald-800',
+  medium: 'bg-amber-100 text-amber-800',
+  high:   'bg-red-100 text-red-800',
+};
+
+const COST_LABEL: Record<string, string> = {
+  low: 'Low budget', medium: 'Mid range', high: 'Premium',
+};
+
 interface Props {
   room: RoomType;
   selections: Partial<Record<Category, Item>>;
@@ -15,82 +25,96 @@ export default function SummaryPanel({ room, selections, summary, onGenerate }: 
   const hasSelections = selectedCount > 0;
 
   return (
-    <div style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '1rem' }}>
+    <div className="space-y-4">
+
       {/* Current selections */}
-      <p style={{ fontWeight: 700, marginBottom: '0.75rem' }}>Your Selections</p>
-
-      <p style={{ fontSize: '0.875rem', color: '#555', marginBottom: '0.75rem' }}>
-        Room: <strong>{roomLabel}</strong>
-      </p>
-
-      {categories.map((category) => {
-        const item = selections[category];
-        return (
-          <div key={category} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '0.4rem' }}>
-            <span style={{ color: '#888' }}>{CATEGORY_LABEL[category]}</span>
-            <span style={{ fontWeight: 500 }}>{item ? item.name : '—'}</span>
-          </div>
-        );
-      })}
-
-      <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '0.5rem' }}>
-        {selectedCount} of {categories.length} selected
-      </p>
-
-      <hr style={{ margin: '1rem 0' }} />
+      <div className="bg-white border border-stone-200 rounded-2xl p-4">
+        <p className="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-3">
+          Your Selections
+        </p>
+        <p className="text-sm text-stone-500 mb-3">
+          Room: <span className="font-semibold text-stone-800">{roomLabel}</span>
+        </p>
+        <div className="space-y-2">
+          {categories.map((category) => {
+            const item = selections[category];
+            return (
+              <div key={category} className="flex justify-between items-center text-sm">
+                <span className="text-stone-400">{CATEGORY_LABEL[category]}</span>
+                <span className={item ? 'font-medium text-stone-800' : 'text-stone-300'}>
+                  {item ? item.name : '—'}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-3 pt-3 border-t border-stone-100 text-xs text-stone-400">
+          {selectedCount} of {categories.length} selected
+        </div>
+      </div>
 
       {/* Generate button */}
       <button
         onClick={onGenerate}
         disabled={!hasSelections}
-        style={{
-          width: '100%',
-          padding: '0.6rem',
-          background: hasSelections ? '#111' : '#ddd',
-          color: hasSelections ? '#fff' : '#999',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: hasSelections ? 'pointer' : 'not-allowed',
-          fontWeight: 600,
-          fontSize: '0.875rem',
-        }}
+        className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-all ${
+          hasSelections
+            ? 'bg-stone-900 text-white hover:bg-stone-700'
+            : 'bg-stone-100 text-stone-400 cursor-not-allowed'
+        }`}
       >
         Generate AI Summary
       </button>
 
-      {/* AI Summary output */}
+      {/* AI summary output */}
       {summary && (
-        <div style={{ marginTop: '1rem' }}>
-          <hr style={{ marginBottom: '1rem' }} />
+        <div className="bg-white border border-stone-200 rounded-2xl p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-semibold uppercase tracking-widest text-stone-400">AI Summary</p>
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${COST_BADGE[summary.costLevel]}`}>
+              {COST_LABEL[summary.costLevel]}
+            </span>
+          </div>
 
-          <p style={{ fontSize: '0.875rem', marginBottom: '0.75rem' }}>{summary.overview}</p>
-
-          <p style={{ fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.25rem' }}>
-            Budget: <span style={{ textTransform: 'capitalize' }}>{summary.costLevel}</span>
-          </p>
+          <p className="text-sm text-stone-600 leading-relaxed">{summary.overview}</p>
 
           {summary.costNotes.length > 0 && (
-            <ul style={{ fontSize: '0.8rem', color: '#555', paddingLeft: '1.2rem', marginBottom: '0.75rem' }}>
-              {summary.costNotes.map((note, i) => <li key={i}>{note}</li>)}
-            </ul>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-1.5">Cost</p>
+              <ul className="space-y-1">
+                {summary.costNotes.map((note, i) => (
+                  <li key={i} className="text-sm text-stone-600 flex gap-2">
+                    <span className="text-stone-300 shrink-0">›</span>{note}
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
 
           {summary.issues.length > 0 && (
-            <>
-              <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#b45309', marginBottom: '0.25rem' }}>Issues</p>
-              <ul style={{ fontSize: '0.8rem', color: '#b45309', paddingLeft: '1.2rem', marginBottom: '0.75rem' }}>
-                {summary.issues.map((issue, i) => <li key={i}>{issue}</li>)}
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-amber-500 mb-1.5">Issues</p>
+              <ul className="space-y-1.5">
+                {summary.issues.map((issue, i) => (
+                  <li key={i} className="text-sm text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+                    {issue}
+                  </li>
+                ))}
               </ul>
-            </>
+            </div>
           )}
 
           {summary.recommendations.length > 0 && (
-            <>
-              <p style={{ fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.25rem' }}>Recommendations</p>
-              <ul style={{ fontSize: '0.8rem', color: '#555', paddingLeft: '1.2rem' }}>
-                {summary.recommendations.map((rec, i) => <li key={i}>{rec}</li>)}
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-1.5">Recommendations</p>
+              <ul className="space-y-1">
+                {summary.recommendations.map((rec, i) => (
+                  <li key={i} className="text-sm text-stone-600 flex gap-2">
+                    <span className="text-stone-300 shrink-0">→</span>{rec}
+                  </li>
+                ))}
               </ul>
-            </>
+            </div>
           )}
         </div>
       )}
